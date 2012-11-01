@@ -52,7 +52,14 @@ describe Game do
       Board.any_instance.stub(:four_in_a_row?).and_return(true)    
       game.victory?.should == true
     end
+  end
 
+  describe "#draw?" do
+
+    it 'checks for draw conditions (board full)' do
+      Board.any_instance.stub(:spaces_left?).and_return(false)
+      game.draw?.should == true    
+    end
   end
 
 end
