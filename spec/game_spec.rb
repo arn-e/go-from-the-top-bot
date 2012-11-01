@@ -3,7 +3,12 @@ require '../lib/game'
 describe Game do
  
   let(:game) {Game.new}
-    
+  let(:db) {Sqlite3::Database.new('test.db')}
+  
+  after(:all) do
+    FileUtils.rm('test.db')
+  end
+
 	describe '#initialize' do
 
 		it 'initialize a turn' do
@@ -62,16 +67,13 @@ describe Game do
     end
   end
 
+  describe "#record_score" do
+
+    it 'records players game history in GameHistory database' do
+      game.record_score
+      db.execute("SELECT COUNT(*) FROM gamehistory")
+    end
+
+  end  
+
 end
-
-
-# Robert's stuff
-# before :each do
-  #   Board.stub(:new).and_return(mock_board)
-  # end
-
-      # before :each do
-    #   mock_board.stub(:valid_placement?).and_return(true)
-    #   mock_board.stub(:game_over?).and_return(false)
-    # end
-# let(:mock_board) { mock("Board", :valid_placement? => true) }

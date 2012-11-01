@@ -28,6 +28,10 @@ class Game
     @board.four_in_a_row?
   end
 
+  def draw?
+    @board.spaces_left? ? false : true 
+  end
+
 end
 
 # Delete me later!
