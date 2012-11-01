@@ -1,9 +1,10 @@
 require '../lib/game'
 
 describe Game do
+ 
+  let(:game) {Game.new}
+    
 	describe '#initialize' do
-
-		let(:game) {Game.new}
 
 		it 'initialize a turn' do
 			game.turn.should == "player 1"
@@ -16,8 +17,6 @@ describe Game do
 
   describe '#switch_turn' do 
 
-    let(:game) {Game.new}
-
     it 'switch player turn' do
       game.switch_turn.should == "player 2"
       game.switch_turn.should == "player 1"
@@ -25,8 +24,6 @@ describe Game do
   end
 
   describe '#add_player' do
-
-    let(:game) {Game.new}
 
     it 'add player' do
       game.add_player("Mike")
@@ -42,12 +39,32 @@ describe Game do
 
   describe '#place_attempt' do
 
-    let(:game) {Game.new}
-
     it 'allows a player to make a placement attempt' do
-      game.place_attempt
+      Board.any_instance.stub(:valid_placement?).and_return(true)    
+      game.place_attempt(3)
+    end
+
+  end
+
+  describe '#victory?' do
+
+    it 'checks for for existence of win conditions' do
+      Board.any_instance.stub(:four_in_a_row?).and_return(true)    
+      game.victory?.should == true
     end
 
   end
 
 end
+
+
+# Robert's stuff
+# before :each do
+  #   Board.stub(:new).and_return(mock_board)
+  # end
+
+      # before :each do
+    #   mock_board.stub(:valid_placement?).and_return(true)
+    #   mock_board.stub(:game_over?).and_return(false)
+    # end
+# let(:mock_board) { mock("Board", :valid_placement? => true) }
