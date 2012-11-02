@@ -1,10 +1,12 @@
 require './game.rb'
 require './board.rb'
+require './player.rb'
 
 class Interface
 
   def initialize(player_name_1, player_name_2)
     @game = Game.new(player_name_1,player_name_2)
+    @computer = Computer.new
     start_connect_four
   end
 
@@ -14,10 +16,10 @@ class Interface
     # puts "How many players?"
     puts "What is the first player's name?"
     player_1 = gets.chomp
-    # player_1 = "player one"
+    # player_1 = "Computer1"
     puts "What is the second player's name?"
-    player_2 = gets.chomp
-    # player_2 = "number two"
+    # player_2 = gets.chomp
+    player_2 = "Computer2"
     self.new(player_1,player_2)
   end
 
@@ -25,29 +27,25 @@ class Interface
     print_board
     unless @game.victory? || @game.draw?
       player_turn
+      @game.switch_turn unless @game.victory?
       start_connect_four
     end
     announce_winner
   end
 
   def announce_winner
-    puts "congratulations!  #{@game.turn} is the winner!"
+    @game.draw? ? (puts "Game's a draw") : (puts "congratulations!  #{@game.turn} is the winner!")
     Kernel::exit
   end
 
   def player_turn
     puts "it is #{@game.turn}'s turn :"
     print "Where would you like to go? "
-    column_choice = gets.chomp.to_i
+    @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move) : (column_choice = gets.chomp.to_i)
     if !@game.place_attempt(column_choice-1)
       player_turn
     end
     print_board
-    p @game.victory?
-    if @game.victory?
-      announce_winner
-    end
-    @game.switch_turn
   end
 
   def print_board
