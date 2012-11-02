@@ -13,7 +13,6 @@ class Game
     @winner = ''
     @database ='../db/game.db'
     @players = add_player(player_name_1,player_name_2)
-    p "players are : #{@players.to_s}"
     @colors = set_player_color(player_name_1,player_name_2)
     @turn = player_name_1
   end
@@ -49,6 +48,14 @@ class Game
     end
   end
 
+  def four_circles?
+    if @board.winning_move?
+      true
+    else
+      false
+    end
+  end
+
   def draw?
     if @board.spaces_left?
      false
@@ -63,7 +70,7 @@ class Game
     db = SQLite3::Database.new(@database)
     wins = db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND winner = '#{player_name}'").first.first
     losses = db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND (winner NOT LIKE '#{player_name}' AND winner NOT LIKE 'Draw')").first.first
-    draws =  db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND winner = 'Draw'").first.first  
+    draws =  db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND winner = 'Draw'").first.first
     puts "#{player_name}, you have #{wins} wins, #{losses} losses and #{draws} draws."
   end
 
