@@ -1,17 +1,19 @@
 require_relative 'player'
 require_relative 'board'
+require 'SQLite3'
 
 class Game
 
   attr_accessor :database, :board
   attr_reader :turn, :players, :date
 
-	def initialize(player_name_1,player_name_2)
+  def initialize(player_name_1,player_name_2)
     @board = Board.new
     @players = []
     @winner = ''
-    @database ='/Users/apprentice/Desktop/connect_four/db/game.db'
+    @database ='../db/game.db'
     @players = add_player(player_name_1,player_name_2)
+    p "players are : #{@players.to_s}"
     @colors = set_player_color(player_name_1,player_name_2)
     @turn = player_name_1
   end
@@ -27,9 +29,10 @@ class Game
   end
 
   def place_attempt(column)
+    puts "debug : column : #{column}"
     if @board.valid_placement?(column)
       @board.place_chip(column, @colors[@turn])
-      switch_turn
+      # switch_turn
       true
     else
       false
@@ -37,12 +40,13 @@ class Game
   end
 
   def victory?
-    if @board.four_in_a_row?
+    if @board.winning_move?
       @winner = @turn
       record_game
       true
+    else
+      false
     end
-    false
   end
 
   def draw?
@@ -57,14 +61,12 @@ class Game
 
   def record_game
     db = SQLite3::Database.new(@database)
-    db.execute("INSERT INTO 'game_hist' (played_on,player_one,player_two,winner) 
-                VALUES (DATETIME('now'),?,?,?)", @players[0].name, @players[1].name, @winner)  
+    db.execute("INSERT INTO 'game_hist' (played_on,player_one,player_two,winner)
+                VALUES (DATETIME('now'),?,?,?)", @players[0].name, @players[1].name, @winner)
   end
 
-  private 
-
   def switch_turn
-    @turn == @players[0] ? @turn = @players[1] : @turn = @players[0]
+    @turn == @players[0].to_s ? @turn = @players[1].to_s : @turn = @players[0].to_s
   end
 end
 
