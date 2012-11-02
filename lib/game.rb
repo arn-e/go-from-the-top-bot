@@ -6,25 +6,30 @@ class Game
   attr_accessor :database, :board
   attr_reader :turn, :players, :date
 
-	def initialize(player_name_1,player_name_2,turn = "player 1")
+	def initialize(player_name_1,player_name_2)
     @board = Board.new
-    @turn = turn
     @players = []
     @winner = ''
-    @database='/Users/apprentice/Desktop/connect_four/db/game.db'
-    add_player(player_name_1,player_name_2)
+    @database ='/Users/apprentice/Desktop/connect_four/db/game.db'
+    @players = add_player(player_name_1,player_name_2)
+    @colors = set_player_color(player_name_1,player_name_2)
+    @turn = player_name_1
   end
 
-  def add_player(player_name_1,player_name_2)
-    # raise "Too Many Players" if @players.size == 2
-    @players << new_player = Player.new(player_name_1)
-    @players << new_player = Player.new(player_name_2)
+  def add_player(player_name_1,player_name_2,players = [])
+    players << new_player = Player.new(player_name_1)
+    players << new_player = Player.new(player_name_2)
+    players
+  end
+
+  def set_player_color(player_name_1,player_name_2)
+    {player_name_1 => "R", player_name_2 => "B"}
   end
 
   def place_attempt(column)
     if @board.valid_placement?(column)
+      @board.place_chip(column, @colors[@turn])
       switch_turn
-      #add place chip
       true
     else
       false
@@ -59,7 +64,7 @@ class Game
   private 
 
   def switch_turn
-    @turn == "player 1" ? @turn = "player 2" : @turn = "player 1"
+    @turn == @players[0] ? @turn = @players[1] : @turn = @players[0]
   end
 end
 
