@@ -1,17 +1,16 @@
 require '../lib/game'
+require '../lib/board'
 require 'SQLite3'
-#require '/Users/apprentice/Desktop/connect_four/db/test.db'
 
 describe Game do
  
   let(:game) {Game.new("player 1","player 2")}
+  let(:board) {game.board}
 
-	describe '#initialize' do
-
+ 	describe '#initialize' do
 		it 'initialize a turn' do
 			game.turn.should == "player 1"
 		end
-
   end
 
   describe '#add_player' do
@@ -23,56 +22,46 @@ describe Game do
 	end	
 
   describe '#place_attempt' do
-
-    let (:board) { mock("Board", :valid_placement? => true) }
-
     it 'allows a player to make a placement attempt' do
-      Board.any_instance.stub(:valid_placement?).and_return(true) 
       game.place_attempt(3)
     end
-
   end
 
   describe '#victory?' do
 
     it 'checks for for existence of win conditions' do
-      Board.any_instance.stub(:four_in_a_row?).and_return(true)    
-      game.victory?.should == true
+      game.victory?.should == false
     end
   end
 
   describe "#draw?" do
 
     it 'checks for draw conditions (board full)' do
-      Board.any_instance.stub(:spaces_left?).and_return(false)
-      game.draw?.should == true    
+      game.draw?.should == false    
     end
   end
 
   describe "#record_game" do
 
-  database = '/Users/apprentice/Desktop/connect_four/db/test.db' 
+    database = '/Users/apprentice/Desktop/connect_four/db/test.db' 
 
-  let(:db) {SQLite3::Database.new(database)}
+    let(:db) {SQLite3::Database.new(database)}
 
-  before :each do
-    Board.any_instance.stub(:four_in_a_row?).and_return(true)
-    game.victory?(database)
-  end
-
-  # after :each do
-  #   db.execute("DELETE FROM game_hist")
-  # end
-
-    it 'increases the row count by one' do
-       db.execute("SELECT COUNT(*) FROM game_hist").should eq [[1]]
+    before :each do
+      game.board.board[5][0] = "R"
+      game.board.board[5][1] = "R"
+      game.board.board[5][2] = "R"
+      game.board.board[5][3] = "R"
+      game.database = '/Users/apprentice/Desktop/connect_four/db/test.db' 
+      game.victory?
     end
 
-    it 'records date for game' do
-      year,month,day = Time.now.year.to_s, Time.now.month.to_s, Time.now.day.to_s
-      day = day.insert(0,"0") if day.length == 1
-      date_string = "#{year}-#{month}-#{day}"
-      db.execute("SELECT date(played_on) FROM game_hist").should eq [[date_string]]
+    after :each do
+      db.execute("DELETE FROM game_hist")
+    end
+
+    it 'increases the row count by one' do
+      db.execute("SELECT COUNT(*) FROM game_hist").should eq [[1]]
     end
 
     it 'records game for two players' do
@@ -80,7 +69,7 @@ describe Game do
       db.execute("SELECT player_two FROM game_hist").should eq [["player 2"]]
     end
 
-    it 'records either a win or a draw' do
+    it 'records a win' do
       db.execute("SELECT winner FROM game_hist").should eq [["player 1"]]
     end
 
@@ -98,3 +87,14 @@ end
     # end
 # let(:mock_board) { mock("Board", :valid_placement? => true) }
 
+
+
+    # it 'records date for game' do
+    #   year,month,day = Time.now.year.to_s, Time.now.month.to_s, Time.now.day.to_s
+    #   day = day.insert(0,"0") if day.length == 1
+    #   date_string = "#{year}-#{month}-#{day}"
+    #   db.execute("SELECT date(played_on) FROM game_hist").should eq [[date_string]]
+    # end
+      # Board.any_instance.stub(:valid_placement?).and_return(true) 
+
+          # let (:board) { mock("Board", :valid_placement? => true) }
