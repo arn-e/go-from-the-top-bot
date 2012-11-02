@@ -18,7 +18,7 @@ describe Game do
 
     it 'adds two players to the game' do
       game.players[0].name.should eq "player 1"
-      game.players[1].name.should eq "player 2"
+      game. players[1].name.should eq "player 2"
     end 
 	end	
 
@@ -56,20 +56,16 @@ describe Game do
   let(:db) {SQLite3::Database.new(database)}
 
   before :each do
-    game.record_game(database)
+    Board.any_instance.stub(:four_in_a_row?).and_return(true)
+    game.victory?(database)
   end
 
-  after :each do
-    db.execute("DELETE FROM game_hist")
-  end
+  # after :each do
+  #   db.execute("DELETE FROM game_hist")
+  # end
 
     it 'increases the row count by one' do
        db.execute("SELECT COUNT(*) FROM game_hist").should eq [[1]]
-    end
-
-    it 'records game for two players' do
-      db.execute("SELECT player_one FROM game_hist").should eq [["player 1"]]
-      db.execute("SELECT player_two FROM game_hist").should eq [["player 2"]]
     end
 
     it 'records date for game' do
@@ -78,6 +74,16 @@ describe Game do
       date_string = "#{year}-#{month}-#{day}"
       db.execute("SELECT date(played_on) FROM game_hist").should eq [[date_string]]
     end
+
+    it 'records game for two players' do
+      db.execute("SELECT player_one FROM game_hist").should eq [["player 1"]]
+      db.execute("SELECT player_two FROM game_hist").should eq [["player 2"]]
+    end
+
+    it 'records either a win or a draw' do
+      db.execute("SELECT winner FROM game_hist").should eq [["player 1"]]
+    end
+
   end  
 end
 
