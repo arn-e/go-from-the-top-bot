@@ -59,6 +59,15 @@ class Game
     end
   end
 
+  def game_stats(player_name)
+    db = SQLite3::Database.new(@database)
+    wins = db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND winner = '#{player_name}'").first.first
+    losses = db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND (winner NOT LIKE '#{player_name}' AND winner NOT LIKE 'Draw')").first.first
+    draws =  db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = '#{player_name}' OR player_two = '#{player_name}') AND winner = 'Draw'").first.first  
+    puts "#{player_name}, you have #{wins} wins, #{losses} losses and #{draws} draws."
+  end
+
+
   def record_game
     db = SQLite3::Database.new(@database)
     db.execute("INSERT INTO 'game_hist' (played_on,player_one,player_two,winner)

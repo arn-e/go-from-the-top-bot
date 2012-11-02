@@ -41,7 +41,7 @@ describe Game do
     end
   end
 
-  describe "#record_game" do
+  describe "Game_Hist database" do
 
     database = '/Users/apprentice/Desktop/connect_four/db/test.db' 
 
@@ -60,20 +60,38 @@ describe Game do
       db.execute("DELETE FROM game_hist")
     end
 
-    it 'increases the row count by one' do
-      db.execute("SELECT COUNT(*) FROM game_hist").should eq [[1]]
-    end
+    describe '#record_game' do
 
-    it 'records game for two players' do
-      db.execute("SELECT player_one FROM game_hist").should eq [["player 1"]]
-      db.execute("SELECT player_two FROM game_hist").should eq [["player 2"]]
-    end
+      it 'increases the row count by one' do
+        db.execute("SELECT COUNT(*) FROM game_hist").should eq [[1]]
+      end
 
-    it 'records a win' do
-      db.execute("SELECT winner FROM game_hist").should eq [["player 1"]]
-    end
+      it 'records game for two players' do
+        db.execute("SELECT player_one FROM game_hist").should eq [["player 1"]]
+        db.execute("SELECT player_two FROM game_hist").should eq [["player 2"]]
+      end
 
-  end  
+      it 'records a win' do
+        db.execute("SELECT winner FROM game_hist").should eq [["player 1"]]
+      end
+
+    describe "#game_stats" do
+
+      it 'returns number of player wins' do
+        db.execute("SELECT COUNT(*) FROM game_hist WHERE player_one = 'player 1' OR player_two = 'player 1' AND winner = 'player 1'").should eq [[1]]
+      end
+
+      it 'returns number of player draws' do
+        db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = 'player 1' OR player_two = 'player 1') AND winner = 'draw'").should eq [[0]]
+      end
+
+      it 'returns number of player losses' do
+        db.execute("SELECT COUNT(*) FROM game_hist WHERE (player_one = 'player 1' OR player_two = 'player 1') AND winner = 'player 2'").should eq [[0]]
+      end
+    end
+  end
+end
+ 
 end
 
 # Robert's stuff
