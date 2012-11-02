@@ -1,5 +1,5 @@
 require_relative '../lib/board.rb'
-require_relative '../lib/chip.rb'
+#require_relative '../lib/chip.rb'
 
 describe Board do
   context "#initialize" do

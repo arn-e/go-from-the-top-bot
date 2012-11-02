@@ -27,10 +27,10 @@ class Game
     end
   end
 
-  def victory?
+  def victory?(database='/Users/apprentice/Desktop/connect_four/db/game.db')
     if @board.four_in_a_row?
       @winner = @turn
-      record_game
+      record_game(database)
       true
     end
   end
