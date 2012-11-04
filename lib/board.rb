@@ -88,4 +88,24 @@ class Board
     @board.each { |row| puts "#{row}\n" }
   end
 
+  def to_twitter_string(twitter_string = '|')
+    p "hello"
+    @board.each do |i|
+      i.each do |j|
+        case j
+        when "R"
+          char = "O"
+        when "B"
+          char = "X"
+        when " "
+          char = "."
+        end
+        twitter_string << char
+      end
+      twitter_string << '|'
+    end
+    p twitter_string
+    twitter_string
+  end
+
 end
