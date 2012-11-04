@@ -11,14 +11,12 @@ class Interface
     start_connect_four
   end
 
-  def self.setup_game
+  def self.setup_game()
     puts "Welcome to Connect 4"
       print "What is the first player's name? "
       player_1 = gets.chomp
-      # player_1 = "Computer1"
       print "What is the second player's name? "
-      # player_2 = gets.chomp
-      player_2 = "Computer2"
+      player_2 = gets.chomp
       puts "\n"
       self.new(player_1,player_2)
   end
