@@ -4,8 +4,8 @@ require 'SQLite3'
 
 class Game
 
-  PLAYER_ONE_CHIP = "R"
-  PLAYER_TWO_CHIP = "B"
+  PLAYER_ONE_CHIP = "X"
+  PLAYER_TWO_CHIP = "O"
 
   attr_accessor :database, :board
   attr_reader :turn, :players, :date
