@@ -1,9 +1,13 @@
+require 'colorize'
 require_relative 'game'
 require_relative 'board'
 require_relative "player"
 require 'SQLite3'
 
 class Interface
+
+RED_CHIP = "O"
+BLACK_CHIP = "X" 
 
   attr_accessor :game, :computer
 
@@ -41,19 +45,21 @@ class Interface
   end
 
   def player_turn(column_choice = nil)
+    puts "column choice : #{column_choice}"
     if column_choice == nil
       puts "it is #{@game.turn}'s turn :"
       print "Where would you like to go? \n "
-      @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move(@game.board)) : (column_choice = gets.chomp.to_i)
+      @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move(@game.board)+1) : (column_choice = gets.chomp.to_i)
     end
     if !@game.place_attempt(column_choice-1)
       player_turn
     end
+    puts "stuff"
     print_board
   end
 
   def print_board
-    puts "  0   1    2    3    4    5    6    "
+    puts "  1    2    3    4    5    6    7    "
     puts "---------------------------------"
     line = ""
     @game.board.board.each do |row|
@@ -75,3 +81,4 @@ end
 
 
 # Interface.setup_game
+# 
