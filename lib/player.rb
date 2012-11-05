@@ -115,4 +115,3 @@ class Computer < Player
     computer_final_move
   end
 
-end

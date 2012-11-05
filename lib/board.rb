@@ -6,8 +6,8 @@ class Board
   BOARD_ROWS = 6
   CONNECT_NO = 4
   EMPTY_CELL = "."
-  RED_CHIP = "X"
-  BLACK_CHIP = "O"
+  RED_CHIP = "O"
+  BLACK_CHIP = "X"
 
   attr_reader :board, :last_played_column, :last_played_row
 
@@ -86,6 +86,17 @@ class Board
 
   def to_s
     @board.each { |row| puts "#{row}\n" }
+  end
+
+  def to_twitter_string(twitter_string = '|')
+    @board.each do |i|
+      i.each do |j|
+        j == " " ? char = "." : char = j
+        twitter_string << char
+      end
+      twitter_string << '|'
+    end
+    twitter_string
   end
 
 end

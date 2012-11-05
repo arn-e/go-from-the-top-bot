@@ -5,11 +5,13 @@ require 'SQLite3'
 
 class Interface
 
+  attr_accessor :game, :computer
+
   def initialize(player_name_1, player_name_2)
     @game = Game.new(player_name_1,player_name_2)
     @computer = Computer.new
     print_board # added this so it does not print twice (post turn and before turn)...print on init
-    start_connect_four
+    # start_connect_four
   end
 
   def self.setup_game
@@ -35,15 +37,16 @@ class Interface
 
   def announce_winner
     @game.draw? ? (puts "Game's a draw") : (puts "congratulations!  #{@game.turn} is the winner!")
-    # @game.game_stats(@game.turn)
     Kernel::exit
   end
 
-  def player_turn
-    puts "it is #{@game.turn}'s turn :"
-    print "Where would you like to go? \n "
-    @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move(@game.board)) : (column_choice = gets.chomp.to_i)
-    if !@game.place_attempt(column_choice)
+  def player_turn(column_choice = nil)
+    if column_choice == nil
+      puts "it is #{@game.turn}'s turn :"
+      print "Where would you like to go? \n "
+      @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move(@game.board)) : (column_choice = gets.chomp.to_i)
+    end
+    if !@game.place_attempt(column_choice-1)
       player_turn
     end
     print_board
@@ -71,4 +74,4 @@ class Interface
 end
 
 
-Interface.setup_game
+# Interface.setup_game
