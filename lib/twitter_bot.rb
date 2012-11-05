@@ -47,9 +47,10 @@ class TwitterResponder
     (0...3).map{65.+(rand(26)).chr}.join
   end
 
-  def send_reply(reply_to_user, response = craft_response)
+  def send_reply(reply_to_user, response = craft_string)
     puts "debug : send reply triggered"
-    Twitter.update("@#{reply_to_user} Game on! #{@twitter_hash_tag} #{response}!")
+    Twitter.update("@#{reply_to_user} Aha! #{reply_to_user} wants to get dismantled like the #{response} it is! #{@twitter_hash_tag}")
+    Twitter.update("@#{reply_to_user} Game on! #{@twitter_hash_tag}!")
     set_opponent(reply_to_user)
     wait_for_response
   end
@@ -58,9 +59,10 @@ class TwitterResponder
     @opponent = opponent
   end
 
-  def send_move(tweet_sender, response = craft_response)
+  def send_move(tweet_sender, response = craft_response, word = craft_one_word_response)
     puts "debug : send move triggered"
-    Twitter.update("@#{tweet_sender} #{board_to_string} #{@twitter_hash_tag} #{response}!")
+    Twitter.update("@#{tweet_sender} #{board_to_string} #{@twitter_hash_tag} #{generate_hash}!")
+    Twitter.update("@#{tweet_sender} Your move, #{word}! #{@twitter_hash_tag}")
   end
 
   def wait_for_response
@@ -153,6 +155,11 @@ class TwitterResponder
   def craft_response(phrase = [])
     (0..2).each {|i| phrase << @shakes[rand(1..@shakes.length - 1)][i]}
     phrase.insert(0,"Thou").join(' ')
+  end
+
+  def craft_string(phrase = [])
+    (0..2).each {|i| phrase << @shakes[rand(1..@shakes.length - 1)][i]}
+    phrase.join(' ')
   end
 
   def craft_one_word_response
