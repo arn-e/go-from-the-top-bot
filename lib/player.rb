@@ -14,14 +14,14 @@ end
 
 class Computer < Player
 
-  RED_CHIP = "X"
-  BLACK_CHIP = "O"
+  RED_CHIP = "O"
+  BLACK_CHIP = "X"
   EMPTY_CELL = "."
 
   def initialize(name="Computer")
     @name = name
-    @player_threat = [EMPTY_CELL, RED_CHIP, RED_CHIP, EMPTY_CELL]
-    @computer_threat = [EMPTY_CELL, BLACK_CHIP, BLACK_CHIP, EMPTY_CELL]
+    @computer_threat = [EMPTY_CELL, RED_CHIP, RED_CHIP, EMPTY_CELL]
+    @player_threat = [EMPTY_CELL, BLACK_CHIP, BLACK_CHIP, EMPTY_CELL]
   end
 
   def pick_move(board_instance)
@@ -29,15 +29,15 @@ class Computer < Player
     @possible_moves = possible_moves
     @possible_safe_moves = possible_safe_moves(@possible_moves)
 
-    return almost_four_moves(@possible_moves,BLACK_CHIP) unless almost_four_moves(@possible_moves,BLACK_CHIP) == nil
     return almost_four_moves(@possible_moves,RED_CHIP) unless almost_four_moves(@possible_moves,RED_CHIP) == nil
+    return almost_four_moves(@possible_moves,BLACK_CHIP) unless almost_four_moves(@possible_moves,BLACK_CHIP) == nil
     return two_in_a_row_moves(@possible_safe_moves,@player_threat) unless two_in_a_row_moves(@possible_safe_moves,@player_threat) == nil
     return two_in_a_row_moves(@possible_safe_moves,@computer_threat) unless two_in_a_row_moves(@possible_safe_moves,@computer_threat) == nil
 
     computer_move = random_move(@possible_safe_moves)
-    x = possible_safe_moves(@possible_safe_moves)
-    puts "all possible moves: #{@possible_moves.inspect}"
-    puts "possible safe move : #{x}"
+    # x = possible_safe_moves(@possible_safe_moves)
+    # puts "all possible  moves: #{@possible_moves.inspect}"
+    # puts "possible safe move : #{x}"
     return computer_move
 
   end
@@ -115,3 +115,4 @@ class Computer < Player
     computer_final_move
   end
 
+end

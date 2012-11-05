@@ -33,7 +33,6 @@ class Game
   def place_attempt(column)
     if @board.valid_placement?(column)
       @board.place_chip(column, @colors[@turn])
-      # switch_turn
       true
     else
       false
@@ -53,13 +52,6 @@ class Game
   def draw?
     result = false
     @board.spaces_left? ? result = false : (@winner = "Draw"; record_game; result = true)
-    # if @board.spaces_left?
-    #    false
-    #   else
-    #     @winner = "Draw"
-    #     # record_game
-    #     true
-    #   end
   end
 
   def game_stats(player_name)
@@ -78,6 +70,7 @@ class Game
   end
 
   def switch_turn
+    p "switch turn called (game class)"
     @turn == @players[0].to_s ? @turn = @players[1].to_s : @turn = @players[0].to_s
   end
 end
