@@ -5,9 +5,9 @@ class Board
   BOARD_COLUMNS = 7
   BOARD_ROWS = 6
   CONNECT_NO = 4
-  EMPTY_CELL = " "
-  RED_CHIP = "R"
-  BLACK_CHIP = "B"
+  EMPTY_CELL = "."
+  RED_CHIP = "O"
+  BLACK_CHIP = "X"
 
   attr_reader :board, :last_played_column, :last_played_row
 
@@ -89,22 +89,13 @@ class Board
   end
 
   def to_twitter_string(twitter_string = '|')
-    p "hello"
     @board.each do |i|
       i.each do |j|
-        case j
-        when "R"
-          char = "O"
-        when "B"
-          char = "X"
-        when " "
-          char = "."
-        end
+        j == " " ? char = "." : char = j
         twitter_string << char
       end
       twitter_string << '|'
     end
-    p twitter_string
     twitter_string
   end
 

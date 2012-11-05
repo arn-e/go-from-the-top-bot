@@ -2,25 +2,14 @@ require './game.rb'
 require './board.rb'
 require './player.rb'
 require 'SQLite3'
-class Interface
 
-  attr_accessor :game, :computer
+class Interface
 
   def initialize(player_name_1, player_name_2)
     @game = Game.new(player_name_1,player_name_2)
     @computer = Computer.new
     print_board # added this so it does not print twice (post turn and before turn)...print on init
-    # start_connect_four
-  end
-
-  def self.setup_game()
-    puts "Welcome to Connect 4"
-      print "What is the first player's name? "
-      player_1 = gets.chomp
-      print "What is the second player's name? "
-      player_2 = gets.chomp
-      puts "\n"
-      self.new(player_1,player_2)
+    start_connect_four
   end
 
   def start_connect_four
@@ -34,16 +23,14 @@ class Interface
 
   def announce_winner
     @game.draw? ? (puts "Game's a draw") : (puts "congratulations!  #{@game.turn} is the winner!")
+    # @game.game_stats(@game.turn)
     Kernel::exit
   end
 
-  def player_turn(column_choice = nil)
-    p "column choice : #{column_choice}"
-    if column_choice == nil
-      puts "it is #{@game.turn}'s turn :"
-      print "Where would you like to go? \n "
-      @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move) : (column_choice = gets.chomp.to_i)
-    end
+  def player_turn
+    puts "it is #{@game.turn}'s turn :"
+    print "Where would you like to go? \n "
+    @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move) : (column_choice = gets.chomp.to_i)
     if !@game.place_attempt(column_choice-1)
       player_turn
     end
