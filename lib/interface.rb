@@ -1,7 +1,8 @@
-require './game.rb'
-require './board.rb'
-require './player.rb'
+require_relative 'game'
+require_relative 'board'
+require_relative "player"
 require 'SQLite3'
+
 class Interface
 
   attr_accessor :game, :computer
@@ -13,12 +14,14 @@ class Interface
     # start_connect_four
   end
 
-  def self.setup_game()
+  def self.setup_game
     puts "Welcome to Connect 4"
       print "What is the first player's name? "
       player_1 = gets.chomp
+      # player_1 = "Computer1"
       print "What is the second player's name? "
-      player_2 = gets.chomp
+      # player_2 = gets.chomp
+      player_2 = "Computer2"
       puts "\n"
       self.new(player_1,player_2)
   end
@@ -38,11 +41,10 @@ class Interface
   end
 
   def player_turn(column_choice = nil)
-    p "column choice : #{column_choice}"
     if column_choice == nil
       puts "it is #{@game.turn}'s turn :"
       print "Where would you like to go? \n "
-      @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move) : (column_choice = gets.chomp.to_i)
+      @game.turn =~ /Computer./ ? (column_choice = @computer.pick_move(@game.board)) : (column_choice = gets.chomp.to_i)
     end
     if !@game.place_attempt(column_choice-1)
       player_turn
@@ -51,12 +53,18 @@ class Interface
   end
 
   def print_board
-    puts " 1    2    3    4    5    6    7"
+    puts "  0   1    2    3    4    5    6    "
     puts "---------------------------------"
     line = ""
     @game.board.board.each do |row|
       row.each do |position|
-        line += "  #{position}  "
+        if position == BLACK_CHIP
+          line += "  #{position}  ".red
+        elsif position == RED_CHIP
+          line += "  #{position}  ".yellow
+        else
+          line += "  #{position}  "
+        end
       end
       puts line
       line = ""

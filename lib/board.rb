@@ -38,17 +38,17 @@ class Board
     winning_move?
   end
 
-  def winning_move?
-    return true if four_in_a_column?
-    return true if four_in_a_row?
-    return true if four_in_a_diagonal?
+  def winning_move?(last_played_column = @last_played_column, last_played_row = @last_played_row)
+    return true if four_in_a_column?(last_played_column)
+    return true if four_in_a_row?(last_played_row)
+    return true if four_in_a_diagonal?(last_played_column,last_played_row)
     return false
   end
 
-  def four_in_a_diagonal?
+  def four_in_a_diagonal?(last_played_column,last_played_row)
     diagonal_neg_slope = []; diagonal_pos_slope = []
-    neg_starting_column = @last_played_column - @last_played_row
-    pos_starting_column = @last_played_column + @last_played_row
+    neg_starting_column = last_played_column - last_played_row
+    pos_starting_column = last_played_column + last_played_row
     @board.each do |row|
       if neg_starting_column >= 0
         diagonal_neg_slope << row[neg_starting_column]
@@ -68,12 +68,12 @@ class Board
     false
   end
 
-  def four_in_a_column?
-    winning_four_combination?(@board.transpose[@last_played_column])
+  def four_in_a_column?(last_played_column)
+    winning_four_combination?(@board.transpose[last_played_column])
   end
 
-  def four_in_a_row?
-    winning_four_combination?(@board[@last_played_row])
+  def four_in_a_row?(last_played_row)
+    winning_four_combination?(@board[last_played_row])
   end
 
   def winning_four_combination?(array)
