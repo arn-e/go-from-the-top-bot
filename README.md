@@ -1,3 +1,14 @@
-# Connect Four
+## Go From The Top Bot
 
-*Replace this file with your own README.  At minimum, you should cover installation and basic usage instructions.*
+This is a CLI & Twitter version of the classic game "connect four"
+
+## Supported Modes :
+
+* Human v. Human
+* Human v. Bot
+* Twitter : Bot v. Opponent
+
+## TBD :
+
+* Expand test suite for Twitter integration
+
